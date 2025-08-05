@@ -1,0 +1,130 @@
+= Gen-AI-KGs: Build Knowledge Graphs from PDFs using LLMs
+:repo: Gen-AI-KGs
+:github: https://github.com/bara080/Gen-AI-KGs
+:neo4j: https://neo4j.com
+:openai: https://platform.openai.com
+:icons: font
+:source-highlighter: coderay
+
+This repository demonstrates how to build and query Knowledge Graphs from unstructured documents (PDFs) using the OpenAI API, LangChain, and Neo4j.
+
+It is inspired by the practices taught in the link:https://graphacademy.neo4j.com/courses/genai-workshop[GraphAcademy RAG Course^] and showcases an alternative pipeline to extract domain-specific knowledge from documents like the *GLEC Framework*.
+
+==  Project Overview
+
+* Extracts chunks from PDF documents
+* Embeds them using OpenAI’s `text-embedding-ada-002`
+* Populates a Neo4j knowledge graph with:
+** `Document`, `Chunk`, and domain-specific nodes like `TransportChain`, `EmissionType`, etc.
+** Rich relationships between entities
+* Builds a vector index on the embeddings
+* Allows Cypher + vector query over content
+
+== 🛠️ Setup
+
+Clone the repository:
+
+[source,bash]
+----
+git clone {github}
+cd Gen-AI-KGs
+----
+
+Create a virtual environment:
+
+[source,bash]
+----
+conda create -n genai-env python=3.11 -y
+conda activate genai-env
+----
+
+Install requirements:
+
+[source,bash]
+----
+pip install -r requirements.txt
+----
+
+Set up environment variables:
+
+Create a `.env` file with the following format:
+
+[source,ini]
+----
+OPENAI_API_KEY=your_openai_key
+NEO4J_URI=neo4j+s://your.neo4j.instance:7687
+NEO4J_USERNAME=neo4j
+NEO4J_PASSWORD=your_password
+----
+
+==  Scripts
+
+=== Build the Knowledge Graph
+
+[source,bash]
+----
+python create.py
+----
+
+* Loads the PDF from the `DOCS_PATH`
+* Splits text into chunks
+* Embeds chunks with OpenAI
+* Adds nodes and relationships to Neo4j
+
+=== Query the Graph
+
+[source,bash]
+----
+python query.py
+----
+
+Returns:
+
+- Node/relationship counts
+- Sample labels and sample nodes
+
+==  Project Structure
+
+[source,txt]
+----
+Gen-AI-KGs/
+├── create.py                  # Main graph builder
+├── query.py                   # Sample Cypher test
+├── build_graph.py             # Alternative pipeline (Neo4j GraphRAG)
+├── create_and_embed_chunks.py # Optional chunking utils
+├── solutions/                 # Optional solutions/tests
+├── .env.example               # Sample .env
+├── .gitignore
+└── README.adoc                # This file
+----
+
+==  Tests (optional)
+
+If you want to add validation or align with GraphAcademy-style exercises:
+
+[source,bash]
+----
+pip install pytest
+pytest solutions/
+----
+
+==  Security
+
+Make sure `.env` is listed in `.gitignore` to avoid leaking secrets:
+
+[source,gitignore]
+----
+.env
+__pycache__/
+*.pyc
+----
+
+==  Resources
+
+- Neo4j: {neo4j}
+- OpenAI: {openai}
+- GraphAcademy RAG Course: https://graphacademy.neo4j.com/courses/genai-workshop
+
+==  License
+
+This project is under the MIT License.
