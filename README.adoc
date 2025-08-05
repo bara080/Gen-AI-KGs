@@ -20,7 +20,7 @@ It is inspired by the practices taught in the link:https://graphacademy.neo4j.co
 * Builds a vector index on the embeddings
 * Allows Cypher + vector query over content
 
-== 🛠️ Setup
+==  Setup
 
 Clone the repository:
 
